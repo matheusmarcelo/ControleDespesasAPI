@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ControleDespesas.Helper;
 using ControleDespesas.Models;
 using ControleDespesas.Repositories;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -29,21 +30,25 @@ namespace ControleDespesas.Services
             return user;
         }
 
-        public async Task PostUserAsync(User user)
+        public async Task<string> PostUserAsync(User user)
         {
             var userExist = await _userRepository.GetUserByEmailAsync(user.Email);
             if(userExist)
             {
-                throw new Exception("Já existe um usuario com este email!");
+                return "Já existe um usuario com este email!";
             }
 
             userExist = await _userRepository.GetUserByDocumentNumberAsync(user.DocumentNumber);
             if(userExist)
             {
-                throw new Exception("Este usuario já possui uma conta!");
+                return "Este usuario já possui uma conta!";
             }
 
+            user.Password = user.Password.GeneratedHash();
+
             await _userRepository.PostUserAsync(user);
+
+            return "Usuario cadastrado com sucesso!";
         }
 
         public async Task<User> PutUserAsync(int id, User user)

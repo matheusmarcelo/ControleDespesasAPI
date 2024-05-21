@@ -1,7 +1,12 @@
+using System.Text;
+using Azure.Identity;
 using ControleDespesas.Context;
 using ControleDespesas.Repositories;
+using ControleDespesas.Respositories;
 using ControleDespesas.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +17,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<AuthenticationRepository>();
+builder.Services.AddScoped<AuthenticationService>();
 
 
 var SqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -19,6 +26,22 @@ var SqlConnection = builder.Configuration.GetConnectionString("DefaultConnection
 builder.Services.AddDbContext<AppDbContext>(
     options => options.UseSqlServer(SqlConnection)
 );
+
+builder.Services.AddAuthentication(x => {
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x => {
+    var secretKey = Encoding.ASCII.GetBytes(builder.Configuration["JWT:secretKey"]);
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(secretKey),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+    };
+});
 
 
 var app = builder.Build();
@@ -33,6 +56,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapControllers();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
 

@@ -135,3 +135,5 @@ C:\ProjetosProgramacao\ProjetosC#\ControleDespesas\obj\Debug\net8.0\refint\Contr
 C:\ProjetosProgramacao\ProjetosC#\ControleDespesas\obj\Debug\net8.0\ControleDespesas.pdb
 C:\ProjetosProgramacao\ProjetosC#\ControleDespesas\obj\Debug\net8.0\ControleDespesas.genruntimeconfig.cache
 C:\ProjetosProgramacao\ProjetosC#\ControleDespesas\obj\Debug\net8.0\ref\ControleDespesas.dll
+C:\ProjetosProgramacao\ProjetosC#\ControleDespesas\obj\Debug\net8.0\ControleDespesas.sourcelink.json
+c:\ProjetosProgramacao\ProjetosC#\ControleDespesas\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

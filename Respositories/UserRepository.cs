@@ -52,10 +52,11 @@ namespace ControleDespesas.Repositories
             return user;
         }
 
+        // Criar Usuario
         public async Task PostUserAsync(User user)
         {
             await _context.User.AddAsync(user);
-            _context.SaveChanges();
+            _context.SaveChanges(); // salva os dados no banco
         }
 
         public async Task<User> PutUserAsync(int id, User user)
@@ -64,8 +65,8 @@ namespace ControleDespesas.Repositories
             {
                 throw new Exception("Não foi possivel realizar a operação.");
             }
-            _context.Entry(user).State = EntityState.Modified;
-            _context.SaveChanges();
+            _context.Entry(user).State = EntityState.Modified; // manter os dados persistidos
+            _context.SaveChanges(); // salvar no banco
 
             var updatedUser = await _context.User.FirstOrDefaultAsync(u => u.UserId == user.UserId);
             return updatedUser;

@@ -20,7 +20,7 @@ namespace ControleDespesas.Controllers
             _userService = userService;
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllUsersAsync()
         {
@@ -52,11 +52,12 @@ namespace ControleDespesas.Controllers
         [HttpPost, Route("create-user")]
         public async Task<IActionResult> PostUserAsync(User user)
         {
-            await _userService.PostUserAsync(user);
-            return Ok("Usuario cadastrado com sucesso!");
+            var result = await _userService.PostUserAsync(user);
+            
+            return Ok(result);
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpPut, Route("update-user/{id}")]
         public async Task<IActionResult> PutUserAsync(int id, User user)
         {
@@ -70,7 +71,7 @@ namespace ControleDespesas.Controllers
             return Ok(updatedUser);
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpDelete, Route("delete-user/{id}")]
         public async Task<IActionResult> DeleteUserAsync(int id)
         {

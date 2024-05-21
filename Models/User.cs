@@ -15,6 +15,11 @@ namespace ControleDespesas.Models
         [StringLength(100)]
         [Column("Nome")]
         public string Name { get; set; }
+
+        // [Required(ErrorMessage = "Senha obrigatória!")]
+        [Column("Senha")]
+        public string Password { get; set; }
+
         [Required(ErrorMessage = "O e-mail é obrigatório")]
         [StringLength(200)]
         [EmailAddress(ErrorMessage = "Email inválido!")]
