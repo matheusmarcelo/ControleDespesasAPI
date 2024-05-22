@@ -15,5 +15,6 @@ namespace ControleDespesas.Context
         }
 
         public DbSet<User>? User { get; set; }
+        public DbSet<Finance>? Finance { get; set; }
     }
 }

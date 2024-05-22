@@ -53,5 +53,6 @@ namespace ControleDespesas.Models
         public int? AddressNumber { get; set; }
         [Column("ComplementoEndereco")]
         public string? AddressLine { get; set; }
+        public ICollection<Finance>? Finances { get; set; }
     }
 }

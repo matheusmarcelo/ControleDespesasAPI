@@ -42,7 +42,7 @@ namespace ControleDespesas.Repositories
 
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
-            var users = await _context.User.ToListAsync();
+            var users = await _context.User.Include(x => x.Finances).AsNoTracking().ToListAsync();
             return users;
         }
 
@@ -56,7 +56,7 @@ namespace ControleDespesas.Repositories
         public async Task PostUserAsync(User user)
         {
             await _context.User.AddAsync(user);
-            _context.SaveChanges(); // salva os dados no banco
+            await _context.SaveChangesAsync(); // salva os dados no banco
         }
 
         public async Task<User> PutUserAsync(int id, User user)
@@ -66,7 +66,7 @@ namespace ControleDespesas.Repositories
                 throw new Exception("Não foi possivel realizar a operação.");
             }
             _context.Entry(user).State = EntityState.Modified; // manter os dados persistidos
-            _context.SaveChanges(); // salvar no banco
+            await _context.SaveChangesAsync(); // salvar no banco
 
             var updatedUser = await _context.User.FirstOrDefaultAsync(u => u.UserId == user.UserId);
             return updatedUser;
@@ -82,7 +82,7 @@ namespace ControleDespesas.Repositories
             }
 
             _context.Remove(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return user;
         }

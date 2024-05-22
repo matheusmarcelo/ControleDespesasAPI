@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using Azure.Identity;
 using ControleDespesas.Context;
 using ControleDespesas.Repositories;
@@ -19,6 +20,8 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthenticationRepository>();
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<FinancialRepository>();
+builder.Services.AddScoped<FinancialService>();
 
 
 var SqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -43,6 +46,9 @@ builder.Services.AddAuthentication(x => {
     };
 });
 
+builder.Services.AddControllers().AddJsonOptions(option => {
+    option.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 var app = builder.Build();
 
