@@ -8,34 +8,37 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControleDespesas.Respositories
 {
-    public class FinancialRepository
+    public class FinanceRepository
     {
         private readonly AppDbContext _context;
+        private readonly WalletRepository _walletRepository;
 
-        public FinancialRepository(AppDbContext context)
+        public FinanceRepository(AppDbContext context, WalletRepository walletRepository)
         {
             _context = context;
+            _walletRepository = walletRepository;
         }
 
-        public async Task<IEnumerable<Finance>> GetAllFinancialAsync()
+        public async Task<IEnumerable<Finance>> GetAllFinanceAsync()
         {
             var finances = await _context.Finance.AsNoTracking().ToListAsync();
             return finances;
         }
 
-        public async Task<Finance> GetFinancialAsync(int id)
+        public async Task<Finance> GetFinanceAsync(int id)
         {
             var financial = await _context.Finance.AsNoTracking().FirstOrDefaultAsync<Finance>(x => x.FinanceId == id);
             return financial;
         }
 
-        public async Task PostFinancialAsync(Finance finance)
+        public async Task PostFinanceAsync(Finance finance)
         {
             await _context.Finance.AddAsync(finance);
+            await _walletRepository.WalletControl(finance.UserId, finance.Value, finance.Type);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Finance> PutFinancialAsync(int id, Finance finance)
+        public async Task<Finance> PutFinanceAsync(int id, Finance finance)
         {
             if(id != finance.FinanceId)
             {
@@ -49,7 +52,7 @@ namespace ControleDespesas.Respositories
             return financialUpdated;
         }
 
-        public async Task<Finance> DeleteFinancialAsync(int id)
+        public async Task<Finance> DeleteFinanceAsync(int id)
         {
             var finance = await _context.Finance.AsNoTracking().FirstOrDefaultAsync<Finance>(x => x.FinanceId == id);
 

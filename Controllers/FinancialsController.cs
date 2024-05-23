@@ -12,19 +12,19 @@ namespace ControleDespesas.Controllers
     [ApiController]
     [Route("v1/finances")]
     [Authorize]
-    public class FinancialsController : ControllerBase
+    public class FinancesController : ControllerBase
     {
-        private readonly FinancialService _financialService;
+        private readonly FinanceService _financeService;
 
-        public FinancialsController(FinancialService financialService)
+        public FinancesController(FinanceService financeService)
         {
-            _financialService = financialService;
+            _financeService = financeService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllFinancialAsync()
+        public async Task<IActionResult> GetAllFinanceAsync()
         {
-            var finances = await _financialService.GetAllFinancialAsync();
+            var finances = await _financeService.GetAllFinanceAsync();
 
             if(finances.Count() <= 0 || finances is null)
             {
@@ -35,9 +35,9 @@ namespace ControleDespesas.Controllers
         }
 
         [HttpGet, Route("finance/{id}")]
-        public async Task<IActionResult> GetFinancialAsync(int id)
+        public async Task<IActionResult> GetFinanceAsync(int id)
         {
-            var finance = await _financialService.GetFinancialAsync(id);
+            var finance = await _financeService.GetFinanceAsync(id);
 
             if(finance is null)
             {
@@ -48,17 +48,17 @@ namespace ControleDespesas.Controllers
         }
 
         [HttpPost, Route("create-finance")]
-        public async Task<IActionResult> PostFinancialAsync(Finance finance)
+        public async Task<IActionResult> PostFinanceAsync(Finance finance)
         {
-            var result = await _financialService.PostFinancialAsync(finance);
+            var result = await _financeService.PostFinanceAsync(finance);
             
             return Ok(result);
         }
 
         [HttpPut, Route("update-finance/{id}")]
-        public async Task<IActionResult> PutFinancialAsync(int id, Finance finance)
+        public async Task<IActionResult> PutFinanceAsync(int id, Finance finance)
         {
-            var financeUpdated = await _financialService.PutFinancialAsync(id, finance);
+            var financeUpdated = await _financeService.PutFinanceAsync(id, finance);
 
             if(financeUpdated is null)
             {
@@ -69,9 +69,9 @@ namespace ControleDespesas.Controllers
         }
 
         [HttpDelete, Route("delete-finance/{id}")]
-        public async Task<IActionResult> DeleteFinancialAsync(int id)
+        public async Task<IActionResult> DeleteFinanceAsync(int id)
         {
-            var finance = await _financialService.DeleteFinancialAsync(id);
+            var finance = await _financeService.DeleteFinanceAsync(id);
 
             if(finance is null)
             {

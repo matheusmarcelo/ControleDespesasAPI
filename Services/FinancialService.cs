@@ -7,44 +7,45 @@ using ControleDespesas.Respositories;
 
 namespace ControleDespesas.Services
 {
-    public class FinancialService
+    public class FinanceService
     {
-        private readonly FinancialRepository _financialRepository;
+        private readonly FinanceRepository _financialRepository;
 
-        public FinancialService(FinancialRepository financialRepository)
+        public FinanceService(FinanceRepository financialRepository)
         {
             _financialRepository = financialRepository;
         }
 
-        public async Task<IEnumerable<Finance>> GetAllFinancialAsync()
+        public async Task<IEnumerable<Finance>> GetAllFinanceAsync()
         {
-            var finances = await _financialRepository.GetAllFinancialAsync();
+            var finances = await _financialRepository.GetAllFinanceAsync();
             return finances;
         }
 
-        public async Task<Finance> GetFinancialAsync(int id)
+        public async Task<Finance> GetFinanceAsync(int id)
         {
-            var finance = await _financialRepository.GetFinancialAsync(id);
+            var finance = await _financialRepository.GetFinanceAsync(id);
             return finance;
         }
 
-        public async Task<string> PostFinancialAsync(Finance finance)
+        public async Task<string> PostFinanceAsync(Finance finance)
         {
 
-            await _financialRepository.PostFinancialAsync(finance);
+            finance.Date = DateTime.Now;
+            await _financialRepository.PostFinanceAsync(finance);
 
-            return "Usuario cadastrado com sucesso!";
+            return "Despesa lançada!";
         }
 
-        public async Task<Finance> PutFinancialAsync(int id, Finance finance)
+        public async Task<Finance> PutFinanceAsync(int id, Finance finance)
         {
-           var financialUpdated = await _financialRepository.PutFinancialAsync(id, finance);
+           var financialUpdated = await _financialRepository.PutFinanceAsync(id, finance);
            return financialUpdated;
         }
 
-        public async Task<Finance> DeleteFinancialAsync(int id)
+        public async Task<Finance> DeleteFinanceAsync(int id)
         {
-            var finance = await _financialRepository.DeleteFinancialAsync(id);
+            var finance = await _financialRepository.DeleteFinanceAsync(id);
             return finance;
         }
     }

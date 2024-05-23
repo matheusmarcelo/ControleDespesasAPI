@@ -10,6 +10,7 @@ namespace ControleDespesas.Models
     [Table("Usuarios")]
     public class User
     {
+        [Column("UsuarioId")]
         public int UserId { get; set; }
         [Required(ErrorMessage = "O nome é obrigatório!")]
         [StringLength(100)]

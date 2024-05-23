@@ -4,6 +4,7 @@ using ControleDespesas.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControleDespesas.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240522232122_PropDateIncluded")]
+    partial class PropDateIncluded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,8 +29,7 @@ namespace ControleDespesas.Migrations
                 {
                     b.Property<int>("FinanceId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("FinanceiroId");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FinanceId"));
 
@@ -48,11 +50,10 @@ namespace ControleDespesas.Migrations
                         .HasColumnName("Tipo");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("int")
-                        .HasColumnName("UsuarioId");
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Value")
-                        .HasColumnType("decimal(10,2)")
+                        .HasColumnType("decimal(18,2)")
                         .HasColumnName("Valor");
 
                     b.HasKey("FinanceId");
@@ -66,8 +67,7 @@ namespace ControleDespesas.Migrations
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("UsuarioId");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
 
@@ -136,45 +136,10 @@ namespace ControleDespesas.Migrations
                     b.ToTable("Usuarios");
                 });
 
-            modelBuilder.Entity("ControleDespesas.Models.Wallet", b =>
-                {
-                    b.Property<int>("WalletId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("CarteiraId");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WalletId"));
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int")
-                        .HasColumnName("UsuarioId");
-
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(10,2)")
-                        .HasColumnName("Total");
-
-                    b.HasKey("WalletId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Carteira");
-                });
-
             modelBuilder.Entity("ControleDespesas.Models.Finance", b =>
                 {
                     b.HasOne("ControleDespesas.Models.User", "User")
                         .WithMany("Finances")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ControleDespesas.Models.Wallet", b =>
-                {
-                    b.HasOne("ControleDespesas.Models.User", "User")
-                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

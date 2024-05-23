@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Azure.Identity;
 using ControleDespesas.Context;
+using ControleDespesas.Models;
 using ControleDespesas.Repositories;
 using ControleDespesas.Respositories;
 using ControleDespesas.Services;
@@ -20,8 +21,9 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthenticationRepository>();
 builder.Services.AddScoped<AuthenticationService>();
-builder.Services.AddScoped<FinancialRepository>();
-builder.Services.AddScoped<FinancialService>();
+builder.Services.AddScoped<FinanceRepository>();
+builder.Services.AddScoped<FinanceService>();
+builder.Services.AddScoped<WalletRepository>();
 
 
 var SqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
