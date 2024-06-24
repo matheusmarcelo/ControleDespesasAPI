@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "WC/cdT1lLqSP/R2IV+DSugzGeWtyGnvQ0bzyZ+dogL1J544g1EXv7PJRsTmHz3StOb2Xey9+7c9IECzSdFHgDg==",
+  "dgSpecHash": "zgMDcjTLf4l9ZSYSR0htR/NBb+eo6vVCsxaX8CX6f/6UVE5nA3Z3D1GaeUNtspG9gtGncrYNMRwDjYNCGvklLA==",
   "success": true,
-  "projectFilePath": "c:\\ProjetosProgramacao\\ProjetosC#\\ControleDespesas\\ControleDespesas.csproj",
+  "projectFilePath": "C:\\ProjetosProgramacao\\ProjetosC#\\ControleDespesas\\ControleDespesas.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mathe\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\mathe\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

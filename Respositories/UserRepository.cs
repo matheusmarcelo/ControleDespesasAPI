@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ControleDespesas.Context;
 using ControleDespesas.Models;
-using Microsoft.AspNetCore.Mvc;
+using ControleDespesas.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControleDespesas.Repositories
@@ -85,6 +81,12 @@ namespace ControleDespesas.Repositories
             await _context.SaveChangesAsync();
 
             return user;
+        }
+
+        public async Task<PagedResult<User>> GetPagedUsers(int page, int pageSize)
+        {
+            var users = _context.User.GetPaged(page, pageSize);
+            return users;
         }
     }
 }

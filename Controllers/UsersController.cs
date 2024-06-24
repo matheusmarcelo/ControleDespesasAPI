@@ -84,5 +84,13 @@ namespace ControleDespesas.Controllers
 
             return Ok(user);
         }
+        
+        [AllowAnonymous]
+        [HttpGet, Route("paged-users/{page:int}/{pageSize:int}")]
+        public async Task<IActionResult> GetPagedUsers(int page, int pageSize)
+        {
+            var users = await _userService.GetPagedUsers(page, pageSize);
+            return Ok(users);
+        }
     }
 }

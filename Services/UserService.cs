@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ControleDespesas.Helper;
 using ControleDespesas.Models;
+using ControleDespesas.Pagination;
 using ControleDespesas.Repositories;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -61,6 +62,12 @@ namespace ControleDespesas.Services
         {
             var user = await _userRepository.DeleteUserAsync(id);
             return user;
+        }
+
+        public async Task<PagedResult<User>> GetPagedUsers(int page, int pageSize)
+        {
+            var users = await _userRepository.GetPagedUsers(page, pageSize);
+            return users;
         }
     }
 }

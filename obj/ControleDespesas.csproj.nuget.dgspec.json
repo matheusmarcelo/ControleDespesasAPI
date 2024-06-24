@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\ProjetosProgramacao\\ProjetosC#\\ControleDespesas\\ControleDespesas.csproj": {}
+    "C:\\ProjetosProgramacao\\ProjetosC#\\ControleDespesas\\ControleDespesas.csproj": {}
   },
   "projects": {
-    "c:\\ProjetosProgramacao\\ProjetosC#\\ControleDespesas\\ControleDespesas.csproj": {
+    "C:\\ProjetosProgramacao\\ProjetosC#\\ControleDespesas\\ControleDespesas.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\ProjetosProgramacao\\ProjetosC#\\ControleDespesas\\ControleDespesas.csproj",
+        "projectUniqueName": "C:\\ProjetosProgramacao\\ProjetosC#\\ControleDespesas\\ControleDespesas.csproj",
         "projectName": "ControleDespesas",
-        "projectPath": "c:\\ProjetosProgramacao\\ProjetosC#\\ControleDespesas\\ControleDespesas.csproj",
+        "projectPath": "C:\\ProjetosProgramacao\\ProjetosC#\\ControleDespesas\\ControleDespesas.csproj",
         "packagesPath": "C:\\Users\\mathe\\.nuget\\packages\\",
-        "outputPath": "c:\\ProjetosProgramacao\\ProjetosC#\\ControleDespesas\\obj\\",
+        "outputPath": "C:\\ProjetosProgramacao\\ProjetosC#\\ControleDespesas\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
