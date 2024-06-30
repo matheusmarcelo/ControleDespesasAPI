@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ControleDespesas.Interfaces.FinanceInterface;
 using ControleDespesas.Models;
 using ControleDespesas.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -14,17 +15,17 @@ namespace ControleDespesas.Controllers
     [Authorize]
     public class FinancesController : ControllerBase
     {
-        private readonly FinanceService _financeService;
+        private readonly IFinanceService _financeService;
 
-        public FinancesController(FinanceService financeService)
+        public FinancesController(IFinanceService financeService)
         {
             _financeService = financeService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllFinanceAsync()
+        public async Task<IActionResult> GetAllAsync()
         {
-            var finances = await _financeService.GetAllFinanceAsync();
+            var finances = await _financeService.GetAllAsync();
 
             if(finances.Count() <= 0 || finances is null)
             {
@@ -35,9 +36,9 @@ namespace ControleDespesas.Controllers
         }
 
         [HttpGet, Route("finance/{id}")]
-        public async Task<IActionResult> GetFinanceAsync(int id)
+        public async Task<IActionResult> GetAsync(int id)
         {
-            var finance = await _financeService.GetFinanceAsync(id);
+            var finance = await _financeService.GetAsync(id);
 
             if(finance is null)
             {
@@ -48,17 +49,17 @@ namespace ControleDespesas.Controllers
         }
 
         [HttpPost, Route("create-finance")]
-        public async Task<IActionResult> PostFinanceAsync(Finance finance)
+        public async Task<IActionResult> CreateAsync(Finance finance)
         {
-            var result = await _financeService.PostFinanceAsync(finance);
+            await _financeService.CreateAsync(finance);
             
-            return Ok(result);
+            return Ok("Lançamento cadastrado com sucesso!");
         }
 
         [HttpPut, Route("update-finance/{id}")]
-        public async Task<IActionResult> PutFinanceAsync(int id, Finance finance)
+        public async Task<IActionResult> UpdateAsync(int id, Finance finance)
         {
-            var financeUpdated = await _financeService.PutFinanceAsync(id, finance);
+            var financeUpdated = await _financeService.UpdateAsync(id, finance);
 
             if(financeUpdated is null)
             {
@@ -69,9 +70,9 @@ namespace ControleDespesas.Controllers
         }
 
         [HttpDelete, Route("delete-finance/{id}")]
-        public async Task<IActionResult> DeleteFinanceAsync(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            var finance = await _financeService.DeleteFinanceAsync(id);
+            var finance = await _financeService.DeleteAsync(id);
 
             if(finance is null)
             {
@@ -79,6 +80,21 @@ namespace ControleDespesas.Controllers
             }
 
             return Ok(finance);
+        }
+
+
+        [AllowAnonymous]
+        [HttpGet, Route("pagination-finances/{id:int}/{page:int}/{pageSize:int}")]
+        public async Task<IActionResult> PaginationFinances(int id, int page, int pageSize)
+        {
+            var paginantion = await _financeService.PaginationFinances(id, page, pageSize);
+
+            if(paginantion.RowCount == 0)
+            {
+                return BadRequest("Você ainda não possui lançamentos!");
+            }
+
+            return Ok(paginantion);
         }
     }
 }

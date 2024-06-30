@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ControleDespesas.Interfaces.AuthenticationInterafaces;
 using ControleDespesas.Models;
 using ControleDespesas.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +13,9 @@ namespace ControleDespesas.Controllers
     [Route("v1/auth")]
     public class AuthenticationsController : ControllerBase
     {
-        private readonly AuthenticationService _authenticationService;
+        private readonly IAuthenticationService _authenticationService;
 
-        public AuthenticationsController(AuthenticationService authenticationService)
+        public AuthenticationsController(IAuthenticationService authenticationService)
         {
             _authenticationService = authenticationService;
         }

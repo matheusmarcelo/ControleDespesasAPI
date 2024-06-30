@@ -1,11 +1,13 @@
 using ControleDespesas.Context;
+using ControleDespesas.Interfaces;
+using ControleDespesas.Interfaces.UserInterfaces;
 using ControleDespesas.Models;
 using ControleDespesas.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControleDespesas.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly AppDbContext _context;
 
@@ -36,26 +38,26 @@ namespace ControleDespesas.Repositories
             return false;
         }
 
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
             var users = await _context.User.Include(x => x.Finances).AsNoTracking().ToListAsync();
             return users;
         }
 
-        public async Task<User> GetUserAsync(int id)
+        public async Task<User> GetAsync(int id)
         {
             var user = await _context.User.FirstOrDefaultAsync(u => u.UserId == id);
             return user;
         }
 
         // Criar Usuario
-        public async Task PostUserAsync(User user)
+        public async Task CreateAsync(User user)
         {
             await _context.User.AddAsync(user);
             await _context.SaveChangesAsync(); // salva os dados no banco
         }
 
-        public async Task<User> PutUserAsync(int id, User user)
+        public async Task<User> UpdateAsync(int id, User user)
         {
             if(id != user.UserId)
             {
@@ -68,7 +70,7 @@ namespace ControleDespesas.Repositories
             return updatedUser;
         }
 
-        public async Task<User> DeleteUserAsync(int id)
+        public async Task<User> DeleteAsync(int id)
         {
             var user = await _context.User.FirstOrDefaultAsync(u => u.UserId == id);
 
@@ -81,12 +83,6 @@ namespace ControleDespesas.Repositories
             await _context.SaveChangesAsync();
 
             return user;
-        }
-
-        public async Task<PagedResult<User>> GetPagedUsers(int page, int pageSize)
-        {
-            var users = _context.User.GetPaged(page, pageSize);
-            return users;
         }
     }
 }

@@ -3,41 +3,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ControleDespesas.Helper;
+using ControleDespesas.Interfaces.AuthenticationInterafaces;
+using ControleDespesas.Models;
 using ControleDespesas.Respositories;
 
 namespace ControleDespesas.Services
 {
-    public class AuthenticationService
+    public class AuthenticationService: IAuthenticationService
     {
-       private readonly AuthenticationRepository _authenticationRepository;
+       private readonly IAuthenticationRepository _authentication;
 
-        public AuthenticationService(AuthenticationRepository authenticationRepository)
+        public AuthenticationService(IAuthenticationRepository authentication)
         {
-            _authenticationRepository = authenticationRepository;
+            _authentication = authentication;
         }
 
-        public async Task<dynamic> LoginAsync(string email, string password)
+        public async Task<LoginResponse> LoginAsync(string email, string password)
         {
             password = password.GeneratedHash();
-            var user = await _authenticationRepository.LoginAsync(email, password);
-
-            if(user is null)
-            {
-                return null;
-            }
+            var user = await VerifyLoginUser(email, password);
 
            var token = Helper.Helper.GenerateToken(user);
 
-            var result = new 
+            var result = new LoginResponse
             {
-                id = user.UserId,
-                code = user.DocumentNumber,
-                name = user.Name,
-                email = user.Email,
-                access_token = token
+                Id = user.UserId,
+                Code = user.DocumentNumber,
+                Name = user.Name,
+                Email = user.Email,
+                Access_token = token
             };
 
             return result;
+        }
+
+        public async Task<User> VerifyLoginUser(string email, string password)
+        {
+            var user = await _authentication.LoginAsync(email, password);
+
+            if(user is null)
+            {
+               throw new Exception("Login inválido!");
+            }
+
+            return user;
         }
     }
 }

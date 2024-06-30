@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ControleDespesas.Helper;
+using ControleDespesas.Interfaces;
+using ControleDespesas.Interfaces.UserInterfaces;
 using ControleDespesas.Models;
 using ControleDespesas.Pagination;
 using ControleDespesas.Repositories;
@@ -10,64 +12,73 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace ControleDespesas.Services
 {
-    public class UserService
+    public class UserValidator : IUserValidator
     {
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UserService(UserRepository userRepository)
+        public UserValidator(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
 
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        public async Task ValidateUserAsync(User user)
         {
-            var users = await _userRepository.GetAllUsersAsync();
-            return users;
-        }
-
-        public async Task<User> GetUserAsync(int id)
-        {
-            var user = await _userRepository.GetUserAsync(id);
-            return user;
-        }
-
-        public async Task<string> PostUserAsync(User user)
-        {
-            var userExist = await _userRepository.GetUserByEmailAsync(user.Email);
+           var userExist = await _userRepository.GetUserByEmailAsync(user.Email);
             if(userExist)
             {
-                return "Já existe um usuario com este email!";
+                throw new Exception("Usuario existente!");
             }
 
             userExist = await _userRepository.GetUserByDocumentNumberAsync(user.DocumentNumber);
             if(userExist)
             {
-                return "Este usuario já possui uma conta!";
+                throw new Exception("Usuario existente!");
             }
+        }
+    }
 
-            user.Password = user.Password.GeneratedHash();
+    public class UserService : IUserService
+    {
+        private readonly IUserRepository _userRepository;
+        private readonly IUserValidator _userValidator;
 
-            await _userRepository.PostUserAsync(user);
-
-            return "Usuario cadastrado com sucesso!";
+        public UserService(IUserRepository userRepository, IUserValidator userValidator)
+        {
+            _userRepository = userRepository;
+            _userValidator = userValidator;
         }
 
-        public async Task<User> PutUserAsync(int id, User user)
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
-           var updatedUser = await _userRepository.PutUserAsync(id, user);
-           return updatedUser;
+            var users = await _userRepository.GetAllAsync();
+            return users;
         }
 
-        public async Task<User> DeleteUserAsync(int id)
+        public async Task<User> GetAsync(int id)
         {
-            var user = await _userRepository.DeleteUserAsync(id);
+            var user = await _userRepository.GetAsync(id);
             return user;
         }
 
-        public async Task<PagedResult<User>> GetPagedUsers(int page, int pageSize)
+        public async Task CreateAsync(User user)
         {
-            var users = await _userRepository.GetPagedUsers(page, pageSize);
-            return users;
+            await _userValidator.ValidateUserAsync(user);
+
+            user.Password = user.Password.GeneratedHash();
+
+            await _userRepository.CreateAsync(user);
+        }
+
+        public async Task<User> UpdateAsync(int id, User user)
+        {
+           var updatedUser = await _userRepository.UpdateAsync(id, user);
+           return updatedUser;
+        }
+
+        public async Task<User> DeleteAsync(int id)
+        {
+            var user = await _userRepository.DeleteAsync(id);
+            return user;
         }
     }
 }

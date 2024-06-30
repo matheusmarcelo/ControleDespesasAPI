@@ -3,46 +3,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ControleDespesas.Context;
+using ControleDespesas.Interfaces.FinanceInterface;
+using ControleDespesas.Interfaces.WalletInterfaces;
 using ControleDespesas.Models;
+using ControleDespesas.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControleDespesas.Respositories
 {
-    public class FinanceRepository
+    public class FinanceRepository : IFinanceRepository
     {
         private readonly AppDbContext _context;
-        private readonly WalletRepository _walletRepository;
+        private readonly IWalletRepository _walletRepository;
 
-        public FinanceRepository(AppDbContext context, WalletRepository walletRepository)
+        public FinanceRepository(AppDbContext context, IWalletRepository walletRepository)
         {
             _context = context;
             _walletRepository = walletRepository;
         }
 
-        public async Task<IEnumerable<Finance>> GetAllFinanceAsync()
+        public async Task<IEnumerable<Finance>> GetAllAsync()
         {
             var finances = await _context.Finance.AsNoTracking().ToListAsync();
             return finances;
         }
 
-        public async Task<Finance> GetFinanceAsync(int id)
+        public async Task<Finance> GetAsync(int id)
         {
             var financial = await _context.Finance.AsNoTracking().FirstOrDefaultAsync<Finance>(x => x.FinanceId == id);
             return financial;
         }
 
-        public async Task PostFinanceAsync(Finance finance)
+        public async Task CreateAsync(Finance finance)
         {
             await _context.Finance.AddAsync(finance);
             await _walletRepository.WalletControl(finance.UserId, finance.Value, finance.Type);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Finance> PutFinanceAsync(int id, Finance finance)
+        public async Task<Finance> UpdateAsync(int id, Finance finance)
         {
             if(id != finance.FinanceId)
             {
-                throw new Exception("Não foi possivel realizar a operação.");
+                throw new ArgumentNullException("Não foi possivel realizar a operação.");
             }
 
             _context.Entry(finance).State = EntityState.Modified;
@@ -52,19 +55,25 @@ namespace ControleDespesas.Respositories
             return financialUpdated;
         }
 
-        public async Task<Finance> DeleteFinanceAsync(int id)
+        public async Task<Finance> DeleteAsync(int id)
         {
             var finance = await _context.Finance.AsNoTracking().FirstOrDefaultAsync<Finance>(x => x.FinanceId == id);
 
             if(finance is null)
             {
-                throw new Exception("Despesa não encontrada!");
+                throw new ArgumentNullException("Despesa não encontrada!");
             }
 
             _context.Remove(finance);
             await _context.SaveChangesAsync();
 
             return finance;
+        }
+
+        public async Task<PagedResultBase> PaginationFinances(int id, int page, int pageSize)
+        {
+            var pagination = _context.Finance.Where(f => f.UserId == id).GetPaged(page, pageSize);
+            return pagination;
         }
     }
 }

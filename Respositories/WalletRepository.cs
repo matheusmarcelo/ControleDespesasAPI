@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ControleDespesas.Context;
+using ControleDespesas.Interfaces.WalletInterfaces;
 using ControleDespesas.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ControleDespesas.Respositories
 {
-    public class WalletRepository
+    public class WalletRepository : IWalletRepository
     {
         private readonly AppDbContext _context;
 

@@ -2,6 +2,11 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Azure.Identity;
 using ControleDespesas.Context;
+using ControleDespesas.Extensions;
+using ControleDespesas.Interfaces.AuthenticationInterafaces;
+using ControleDespesas.Interfaces.FinanceInterface;
+using ControleDespesas.Interfaces.UserInterfaces;
+using ControleDespesas.Interfaces.WalletInterfaces;
 using ControleDespesas.Models;
 using ControleDespesas.Repositories;
 using ControleDespesas.Respositories;
@@ -17,13 +22,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-builder.Services.AddScoped<UserRepository>();
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<AuthenticationRepository>();
-builder.Services.AddScoped<AuthenticationService>();
-builder.Services.AddScoped<FinanceRepository>();
-builder.Services.AddScoped<FinanceService>();
-builder.Services.AddScoped<WalletRepository>();
+builder.Services.AddScoped<IUserValidator, UserValidator>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IFinanceRepository, FinanceRepository>();
+builder.Services.AddScoped<IFinanceService, FinanceService>();
+builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 
 
 var SqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -59,6 +65,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.ConfigureExceptionHandler();
 }
 
 app.UseHttpsRedirection();
@@ -68,8 +75,3 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

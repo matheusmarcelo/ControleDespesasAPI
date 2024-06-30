@@ -44,7 +44,8 @@ namespace ControleDespesas.Helper
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, user.Name),
-                    new Claim(ClaimTypes.Role, user.DocumentNumber)
+                    new Claim(ClaimTypes.Role, user.DocumentNumber),
+                    new Claim(ClaimTypes.Actor, user.UserId.ToString()),
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
